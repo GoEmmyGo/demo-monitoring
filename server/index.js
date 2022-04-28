@@ -21,7 +21,22 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 4545
 
+app.use(rollbar.errorHandler())
+
 app.listen(port, () => {
     console.log(`Listening to you on port ${port}`)
+})
+
+let students = [emmaline, colin, chris, james, lucas, abby, casey]
+
+app.post('/api/student', (req, res)=>{
+    let {name} = req.body
+    name = name.trim()
+
+    students.push(name)
+
+    rollbar.log('Student added successfully', {author: 'Emmaline', type: 'manual entry'})
+
+    res.status(200).send(students)
 })
 
